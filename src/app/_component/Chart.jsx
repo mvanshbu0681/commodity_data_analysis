@@ -18,12 +18,12 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "January", potato: 186, onion: 80 },
+  { month: "February", potato: 305, onion: 200 },
+  { month: "March", potato: 237, onion: 120 },
+  { month: "April", potato: 73, onion: 190 },
+  { month: "May", potato: 209, onion: 130 },
+  { month: "June", potato: 214, onion: 140 },
 ];
 
 const chartConfig = {
@@ -42,9 +42,9 @@ export function Chart() {
     <div className="flex justify-end p-8">
       <Card className="flex-1 max-w-xl">
         <CardHeader>
-          <CardTitle>Area Chart - Stacked</CardTitle>
+          <CardTitle>Market Comparison</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 6 months
+            Showing comaprison for commodities for last 6 Months
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4">
@@ -71,7 +71,7 @@ export function Chart() {
                 content={<ChartTooltipContent indicator="dot" />}
               />
               <Area
-                dataKey="mobile"
+                dataKey="onion"
                 type="natural"
                 fill="var(--color-mobile)"
                 fillOpacity={0.4}
@@ -79,7 +79,7 @@ export function Chart() {
                 stackId="a"
               />
               <Area
-                dataKey="desktop"
+                dataKey="potato"
                 type="natural"
                 fill="var(--color-desktop)"
                 fillOpacity={0.4}
