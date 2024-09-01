@@ -1,56 +1,71 @@
-import Image from "next/image";
-import Navbar from "./_component/Navbar";
+"use client";
+import React, { useState } from "react";
 import Hero from "./_component/Hero";
-import { Chart } from "./_component/Chart";
-import dynamic from "next/dynamic";
-//import { DataTable } from "./_component/DataTable/DataTable";
-import MLTable from "./_component/MLTable";
-import { Component } from "./_component/Mlchart";
-//import Map from "./_component/Map";
-//import { DataTable } from "./_component/DataTable/DataTable";
+import Navbar from "./_component/Navbar";
+import TopMarkets from "./_component/TopMarkets";
+import MarketMap from "./_component/MarketMap";
+import { ContainerWithChildren } from "postcss/lib/container";
 
 export default function Home() {
+  const [selectedCommodityData, setSelectedCommodityData] = useState(null);
+  const [topMarkets, setTopMarkets] = useState([]);
+
+  const handleCommoditySelect = (commodityData) => {
+    setSelectedCommodityData(commodityData);
+  };
+
+  const handleFilterChange = ({ filtered, topRated}) => {
+
+    const selectedMarket = selectedCommodityData?.Market;
+
+    // Filter out the selected market
+    const otherMarkets = filtered.filter(item => item.Market !== selectedMarket);
+
+    // Sort the remaining markets by Modal_Price and take the top 5
+    const topMarkets = topRated ? topRated?.sort((a, b) => b.Modal_Price - a.Modal_Price)
+      .slice(0, 5)
+      .map(item => ({
+        name: item.Market,
+        price: item.Modal_Price,
+        state: item.State,
+        district: item.District,
+      })): [];
+
+    setTopMarkets(topMarkets);
+  };
+
   return (
     <div>
-      <Navbar />
-      <div className="w-3/4 mx-auto flex flex-col">
-        {/* Adjust the layout to have two columns */}
-        <div className="flex flex-row justify-between gap-2">
-          {/* Hero Section */}
-          <div className="flex-1">
-            <Hero
-              title="Essential Food Commodities Price:"
-              subtitle="Real-time Commodity Pricing Uttar Pradesh"
-              lastUpdate="2024-08-24 15:00:00"
-              status="Satisfactory"
-              price="8800"
-              unit="per 100kg"
-            />
-          </div>
-
-          <div className="flex-1">
-            <Chart />
-          </div>
-        </div>
+      <Navbar onCommoditySelect={handleCommoditySelect} onFilterChange={handleFilterChange} />
+      <div className="flex w-full">
+      <div className="flex-1 p-4">
+        {selectedCommodityData && (
+          <Hero
+            commodityName={selectedCommodityData.Commodity}
+            variety={selectedCommodityData.Variety}
+            lastUpdate={selectedCommodityData.Arrival_Date}
+            price={selectedCommodityData.Modal_Price}
+            unit="Quintal"
+          />
+        )}
       </div>
-
-      {/* <Map /> */}
-      <div className="w-3/4 mx-auto flex gap-8">
-        <MLTable />
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.8859420014956!2d77.2095036749579!3d28.663133632691288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd7400d9a88d%3A0xc003bcf8723bef94!2sAzad%20Market%2C%20Delhi%2C%20110006!5e0!3m2!1sen!2sin!4v1725115370555!5m2!1sen!2sin"
-          width="620"
-          height="500"
-          style={{ border: 0, borderRadius: "20px" }}
-          allowfullscreen=""
-          className="mx-auto"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <div className="flex-1 p-4">
+        {topMarkets.length > 0 && (
+          
+          <TopMarkets
+            title={`Top 5 Markets for ${selectedCommodityData?.Commodity || "Commodity"}`}
+            markets={topMarkets}
+            priceLabel="Price"
+          />
+        )}
       </div>
-      <div className="flex flex-col mt-8">
-        <Component />
-      </div>
+    </div>
+    {/* <div
+          className="w-full z-0 shadow-custom-shadow rounded-2xl bg-white"
+          style={{ paddingRight: "20px" }}
+        >
+          <MarketMap />
+        </div> */}
     </div>
   );
 }

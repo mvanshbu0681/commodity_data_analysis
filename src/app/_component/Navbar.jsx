@@ -1,64 +1,136 @@
-import Image from "next/image";
+"use client";
+import React, { useState, useEffect } from "react";
+import csvData from 'F:/Education/COLLEGE/PROGRAMING/Python/PROJECTS/CommodityDataAnalysisProject/Silver/2024/8/31/Silver_commoditydata_31082024.csv';
+import Select from "react-select";
 
-const Navbar = () => {
+function Navbar({ onCommoditySelect, onFilterChange }) {
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedMarket, setSelectedMarket] = useState("");
+  const [commodities, setCommodities] = useState([]);
+  const [filteredCommodities, setFilteredCommodities] = useState([]);
+  const [selectedCommodity, setSelectedCommodity] = useState(null);
+
+  useEffect(() => {
+    // Process the CSV data
+    setCommodities(csvData);
+  }, []);
+
+  const states = [...new Set(csvData.map(item => item.State))];
+  const districts = selectedState
+    ? [...new Set(csvData.filter(item => item.State === selectedState).map(item => item.District))]
+    : [];
+  const markets = selectedDistrict
+    ? [...new Set(csvData.filter(item => item.District === selectedDistrict).map(item => item.Market))]
+    : [];
+  const markets = selectedDistrict
+    ? [...new Set(csvData.filter(item => item.District === selectedDistrict).map(item => item.Market))]
+    : [];
+
+  // Filter commodities based on selected state, district, and market
+  useEffect(() => {
+    if (selectedState && selectedDistrict && selectedMarket && selectedCommodity) {
+      const filtered = csvData.filter(
+        item =>
+          item.State === selectedState &&
+          item.District === selectedDistrict &&
+          item.Market === selectedMarket
+      );
+      const topRated = csvData.filter(
+        item =>
+          item.Commodity === selectedCommodity
+      );
+      setFilteredCommodities(filtered);
+      onFilterChange({ filtered, topRated });
+    } else {
+      setFilteredCommodities([]);
+      onFilterChange({ filtered: [] });
+    }
+  }, [selectedState, selectedDistrict, selectedMarket, selectedCommodity, onFilterChange]);
+
+  const commodityOptions = filteredCommodities.map(item => ({
+    value: item,
+    label: `${item.Commodity} - ${item.Variety} (${item.Grade})`
+  }));
+
+  const handleCommodityChange = (selectedOption) => {
+    setSelectedCommodity(selectedOption);
+    onCommoditySelect(selectedOption ? selectedOption.value : null);
+  };
+
   return (
-    <nav
-      className="text-white flex justify-between p-2"
-      style={{
-        //backgroundImage: "linear-gradient(to top, #a8edea 0%, #fed6e3 100%)",
-        opacity: 1.0, // Increase the transparency here
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)", // Add the box shadow here
-        //position: "fixed", // Make the navbar position fixed
-        top: 0, // Stick the navbar to the top
-        left: 0, // Stick the navbar to the left
-        right: 0, // Stick the navbar to the right
-        zIndex: 999, // Set a high z-index to make sure the navbar is on top of other elements
-      }}
-    >
-      <div className="flex items-center">
-        <Image
-          src="/agro.jpg"
-          alt="Logo"
-          width={50}
-          height={50}
-          className=" rounded-full mr-2"
-        />
-
-        <h1 className=" text-black font-bold">Commodity Data Analyzer</h1>
-      </div>
-      <div className="flex items-center ml-auto">
-        <a href="#" className="text-black font-bold mx-5">
-          Home
-        </a>
-        <a href="#" className="text-black font-bold mx-5">
-          PriceTrends
-        </a>
-        <a href="#" className="text-black font-bold mx-5">
-          ForeCasting
-        </a>
-        <a href="#" className="text-black font-bold mx-5">
-          Contact
+    <nav className="sticky top-0 z-10 bg-white backdrop-filter backdrop-blur-2xl bg-opacity-10 shadow-2xl border-slate-800">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="/" className="flex items-center gap-3">
+          <span className="lg:text-3xl text-xl text-black font-semibold">
+            Krishi Saathi
+          </span>
         </a>
 
-        <div className="relative flex items-center">
-          <input
-            type="text"
-            id="search-navbar"
-            className="block w-full p-2 text-sm border border-gray-300 rounded-lg bg-white-50 pl-10 focus:ring-blue-500 focus:border-blue-500 border-black" // Add the border-black class here
-            placeholder="Search..."
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 48 48"
-            fill="gray"
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 pointer-events-none"
-          >
-            <path d="M 20.5 6 C 12.509634 6 6 12.50964 6 20.5 C 6 28.49036 12.509634 35 20.5 35 C 23.956359 35</svg> 27.133709 33.779044 29.628906 31.75 L 39.439453 41.560547 A 1.50015 1.50015 0 1 0 41.560547 39.439453 L 31.75 29.628906 C 33.779044 27.133709 35 23.956357 35 20.5 C 35 12.50964 28.490366 6 20.5 6 z M 20.5 9 C 26.869047 9 32 14.130957 32 20.5 C 32 23.602612 30.776198 26.405717 28.791016 28.470703 A 1.50015 1.50015 0 0 0 28.470703 28.791016 C 26.405717 30.776199 23.602614 32 20.5 32 C 14.130953 32 9 26.869043 9 20.5 C 9 14.130957 14.130953 9 20.5 9 z"></path>
-          </svg>
+        <div className="w-full md:w-auto md:order-1 md:flex">
+          <ul className="flex flex-col md:flex-row md:space-x-8 items-center">
+            <div className="flex space-x-4 text-black items-center">
+              {/* Add your links here */}
+            </div>
+
+            <div className="flex space-x-4">
+              <select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="" disabled>Select State</option>
+                {states.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                disabled={!selectedState}
+              >
+                <option value="" disabled>Select District</option>
+                {districts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedMarket}
+                onChange={(e) => setSelectedMarket(e.target.value)}
+                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                disabled={!selectedDistrict}
+              >
+                <option value="" disabled>Select Market</option>
+                {markets.map((market) => (
+                  <option key={market} value={market}>
+                    {market}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex space-x-4">
+              <Select
+                options={commodityOptions}
+                placeholder="Select Commodity"
+                isClearable
+                value={selectedCommodity}
+                onChange={handleCommodityChange}
+                className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </ul>
         </div>
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;
