@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import csvData from "../../../data/commoditydata.csv";
 import Select from "react-select";
-
+import Image from "next/image";
+import Logo from "../../../public/logo.png";
 function Navbar({ onCommoditySelect, onFilterChange }) {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
@@ -80,6 +81,7 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
     <nav className="sticky top-0 z-10 bg-white shadow-2xl backdrop-filter backdrop-blur-2xl bg-opacity-10 border-slate-800">
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
         <a href="/" className="flex items-center gap-3">
+          <Image src={Logo} alt="Logo" className="w-8 h-8 lg:w-12 lg:h-12" />
           <span className="text-xl font-semibold text-black lg:text-3xl">
             Krishi Saathi
           </span>
