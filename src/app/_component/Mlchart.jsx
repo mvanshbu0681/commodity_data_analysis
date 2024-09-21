@@ -227,13 +227,13 @@ export function Component() {
                   offset="5%"
                   stopColor="hsl(0, 100%, 50%)"
                   stopOpacity={0.8}
-                />{" "}
+                />
                 // Red
                 <stop
                   offset="95%"
                   stopColor="hsl(0, 100%, 50%)"
                   stopOpacity={0.1}
-                />{" "}
+                />
                 // Red
               </linearGradient>
               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
@@ -241,13 +241,13 @@ export function Component() {
                   offset="5%"
                   stopColor="hsl(240, 100%, 50%)"
                   stopOpacity={0.8}
-                />{" "}
+                />
                 // Blue
                 <stop
                   offset="95%"
                   stopColor="hsl(240, 100%, 50%)"
                   stopOpacity={0.1}
-                />{" "}
+                />
                 // Blue
               </linearGradient>
             </defs>
