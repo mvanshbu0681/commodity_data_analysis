@@ -119,17 +119,30 @@ const chartData = [
   { date: "2024-06-30", actual: 446, predicted: 400 },
 ];
 
+// const chartConfig = {
+//   visitors: {
+//     label: "Visitors",
+//   },
+//   desktop: {
+//     label: "Desktop",
+//     color: "hsl(var(--chart-1))",
+//   },
+//   mobile: {
+//     label: "Mobile",
+//     color: "hsl(var(--chart-2))",
+//   },
+// };
 const chartConfig = {
   visitors: {
     label: "Visitors",
   },
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(0, 100%, 50%)", // Red
   },
   mobile: {
     label: "Mobile",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(240, 100%, 50%)", // Blue
   },
 };
 
@@ -182,7 +195,7 @@ export function Component() {
           className="aspect-auto h-[250px] w-full"
         >
           <AreaChart data={filteredData}>
-            <defs>
+            {/* <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
@@ -206,6 +219,36 @@ export function Component() {
                   stopColor="var(--color-mobile)"
                   stopOpacity={0.1}
                 />
+              </linearGradient>
+            </defs> */}
+            <defs>
+              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="hsl(0, 100%, 50%)"
+                  stopOpacity={0.8}
+                />{" "}
+                // Red
+                <stop
+                  offset="95%"
+                  stopColor="hsl(0, 100%, 50%)"
+                  stopOpacity={0.1}
+                />{" "}
+                // Red
+              </linearGradient>
+              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="hsl(240, 100%, 50%)"
+                  stopOpacity={0.8}
+                />{" "}
+                // Blue
+                <stop
+                  offset="95%"
+                  stopColor="hsl(240, 100%, 50%)"
+                  stopOpacity={0.1}
+                />{" "}
+                // Blue
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -237,7 +280,7 @@ export function Component() {
                 />
               }
             />
-            <Area
+            {/* <Area
               dataKey="predicted"
               type="natural"
               fill="url(#fillMobile)"
@@ -249,6 +292,20 @@ export function Component() {
               type="natural"
               fill="url(#fillDesktop)"
               stroke="var(--color-desktop)"
+              stackId="a"
+            /> */}
+            <Area
+              dataKey="predicted"
+              type="natural"
+              fill="url(#fillMobile)"
+              stroke="hsl(240, 100%, 50%)" // Blue
+              stackId="a"
+            />
+            <Area
+              dataKey="actual"
+              type="natural"
+              fill="url(#fillDesktop)"
+              stroke="hsl(0, 100%, 50%)" // Red
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />

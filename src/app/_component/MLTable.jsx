@@ -11,28 +11,28 @@ const MLTable = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
-        <h2 className="text-2xl font-semibold text-blue-600 mb-4">
+    <div className="flex items-center justify-center w-[500px]">
+      <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="mb-4 text-2xl font-semibold text-blue-600">
           Commodity Pricing Plan
         </h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="mb-6 text-sm text-gray-600">
           Future commodity pricing is based on historical data.
         </p>
-        <div className="bg-blue-500 text-white py-2 px-4 rounded-full text-center mb-6">
+        <div className="px-4 py-2 mb-6 text-center text-white bg-blue-500 rounded-full">
           Pricing of Commodity
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {forecastData.map((item, index) => (
             <div
               key={index}
-              className="bg-green-100 p-4 rounded-lg shadow-md text-center"
+              className="p-4 text-center bg-green-100 rounded-lg shadow-md"
             >
-              <p className="text-gray-800 font-medium mb-2">{item.date}</p>
-              <div className="bg-green-300 py-2 px-4 rounded-lg text-lg font-semibold">
+              <p className="mb-2 font-medium text-gray-800">{item.date}</p>
+              <div className="px-4 py-2 text-lg font-semibold bg-green-300 rounded-lg">
                 {item.Price.toFixed(2)}
               </div>
-              <p className="text-gray-600 mt-2">INR/100kg</p>
+              <p className="mt-2 text-gray-600">INR/100kg</p>
             </div>
           ))}
         </div>

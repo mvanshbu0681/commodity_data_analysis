@@ -420,7 +420,7 @@ const MarketMap = () => {
     <MapContainer
       center={[20.5937, 78.9629]} // Center of India
       zoom={5}
-      style={{ height: "500px", width: "100%" }}
+      style={{ height: "500px", width: "650px" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -442,4 +442,4 @@ const MarketMap = () => {
   );
 };
 
-export default MarketMap;
+export default MarketMap;
