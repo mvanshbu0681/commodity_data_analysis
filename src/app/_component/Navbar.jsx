@@ -78,8 +78,8 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
   };
 
   return (
-    <nav className="sticky top-0 z-10 bg-white shadow-2xl backdrop-filter backdrop-blur-2xl bg-opacity-10 border-slate-800">
-      <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
+    <nav className="sticky top-0 z-20  bg-white shadow-2xl backdrop-filter backdrop-blur-2xl bg-opacity-10 border-slate-800">
+      <div className="flex flex-wrap  items-center justify-between max-w-screen-xl p-4 mx-auto">
         <a href="/" className="flex items-center gap-3">
           <Image src={Logo} alt="Logo" className="w-8 h-8 lg:w-12 lg:h-12" />
           <span className="text-xl font-semibold text-black lg:text-3xl">

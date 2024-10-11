@@ -11,7 +11,7 @@ const MLTable = () => {
   ];
 
   return (
-    <div className="flex items-center justify-center w-[500px]">
+    <div className="flex items-center justify-center w-[540px]">
       <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
         <h2 className="mb-4 text-2xl font-semibold text-blue-600">
           Commodity Pricing Plan

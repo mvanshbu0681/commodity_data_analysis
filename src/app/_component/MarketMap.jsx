@@ -26,16 +26,16 @@ const marketData = [
   { id: 18, name: "Karpawand", latitude: 19.3656888, longitude: 82.0874619 },
   { id: 19, name: "Lohandiguda", latitude: 19.1653061, longitude: 81.7433345 },
   { id: 20, name: "Tokapal", latitude: 19.0111236, longitude: 81.8903303 },
-  { id: 21, name: "Saja", latitude: 31.3016935, longitude: 120.5810725 },
+  //{ id: 21, name: "Saja", latitude: 31.3016935, longitude: 120.5810725 },
   { id: 22, name: "Bilaspur", latitude: 28.868311, longitude: 79.29807497 },
-  {
-    id: 23,
-    name: "Munguli",
-    city: "Mungeli",
-    state: "Chattisgarh",
-    latitude: -1.0553369,
-    longitude: 29.1459308,
-  },
+  // {
+  //   id: 23,
+  //   name: "Munguli",
+  //   city: "Mungeli",
+  //   state: "Chattisgarh",
+  //   latitude: -1.0553369,
+  //   longitude: 29.1459308,
+  // },
   {
     id: 24,
     name: "Narayanpur",
@@ -303,20 +303,20 @@ const marketData = [
     longitude: 71.7675484,
   },
   { id: 61, name: "Botad", latitude: 22.1686, longitude: 71.6685 },
-  { id: 62, name: "Hadad", latitude: 47.4025956, longitude: 23.0250179 },
+  // { id: 62, name: "Hadad", latitude: 47.4025956, longitude: 23.0250179 },
   { id: 63, name: "Kalediya", latitude: 22.0690948, longitude: 73.7115429 },
   { id: 64, name: "Dahod", latitude: 22.8358786, longitude: 74.2556823 },
   { id: 65, name: "Limkheda", latitude: 19.8551662, longitude: 76.4396953 },
   { id: 66, name: "Dehgam", latitude: 23.16403255, longitude: 72.88183192 },
   { id: 67, name: "Kalol", latitude: 22.6103179, longitude: 73.4617061 },
-  { id: 68, name: "Mansa", latitude: -11.2006743, longitude: 28.8893922 },
+  // { id: 68, name: "Mansa", latitude: -11.2006743, longitude: 28.8893922 },
   { id: 69, name: "Kodinar", latitude: 20.795759, longitude: 70.7045453 },
   { id: 70, name: "Dhrol", latitude: 22.5675674, longitude: 70.4164394 },
   { id: 71, name: "Mangrol", latitude: 26.2482157, longitude: 77.35356339 },
   { id: 72, name: "Visavadar", latitude: 21.3417058, longitude: 70.7534299 },
   { id: 73, name: "Rapar", latitude: 23.57215, longitude: 70.6465877 },
   { id: 74, name: "Kapadvanj", latitude: 23.0232402, longitude: 73.0727531 },
-  { id: 75, name: "Kadi", latitude: 7.2931208, longitude: 80.6350358 },
+  // { id: 75, name: "Kadi", latitude: 7.2931208, longitude: 80.6350358 },
   { id: 76, name: "Mehsana", latitude: 23.6015557, longitude: 72.3867981 },
   { id: 77, name: "Unjha", latitude: 23.7968484, longitude: 72.3818955 },
   { id: 78, name: "Visnagar", latitude: 23.7036823, longitude: 72.5404601 },
@@ -336,7 +336,7 @@ const marketData = [
   { id: 92, name: "Modasa", latitude: 23.4634245, longitude: 73.2990631 },
   { id: 93, name: "Talod", latitude: 23.018122, longitude: 76.41674432 },
   { id: 94, name: "Mandvi", latitude: 22.8314482, longitude: 69.35081 },
-  { id: 95, name: "Surat", latitude: 45.9383, longitude: 3.2553 },
+  // { id: 95, name: "Surat", latitude: 45.9383, longitude: 3.2553 },
   { id: 96, name: "Chotila", latitude: 25.8719283, longitude: 73.1822061 },
   { id: 97, name: "Ahwa-Dang", latitude: 20.7587262, longitude: 73.6873533 },
   { id: 98, name: "Padra", latitude: 25.09783285, longitude: 78.2705947 },
@@ -410,9 +410,9 @@ const marketData = [
 const customIcon = new L.Icon({
   iconUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png", // URL to your custom icon
-  iconSize: [25, 41], // Size of the icon
-  iconAnchor: [12, 41], // Point of the icon which will correspond to marker's location
-  popupAnchor: [1, -34], // Point from which the popup should open relative to the iconAnchor
+  iconSize: [20, 33], // Size of the icon
+  iconAnchor: [10, 33], // Point of the icon which will correspond to marker's location
+  popupAnchor: [1, -28], // Point from which the popup should open relative to the iconAnchor
 });
 
 const MarketMap = () => {
@@ -420,7 +420,14 @@ const MarketMap = () => {
     <MapContainer
       center={[20.5937, 78.9629]} // Center of India
       zoom={5}
-      style={{ height: "500px", width: "650px" }}
+      style={{
+        z: "10",
+        height: "400px",
+        width: "1215px",
+        borderRadius: "15px",
+        overflow: "hidden",
+        marginTop: "60px",
+      }} // Added borderRadius and overflow
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

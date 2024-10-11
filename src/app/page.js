@@ -7,6 +7,7 @@ import MarketMap from "./_component/MarketMap";
 import { ContainerWithChildren } from "postcss/lib/container";
 import { Chart } from "./_component/Chart";
 import MLTable from "./_component/MLTable";
+import { Component } from "./_component/BarchartMarketPrices.";
 
 export default function Home() {
   const [selectedCommodityData, setSelectedCommodityData] = useState(null);
@@ -46,7 +47,7 @@ export default function Home() {
         onCommoditySelect={handleCommoditySelect}
         onFilterChange={handleFilterChange}
       />
-      <div className="flex w-3/4 mx-auto">
+      <div className="flex w-4/5 mx-auto">
         <div className="flex-1 p-4">
           {selectedCommodityData && (
             <Hero
@@ -58,9 +59,18 @@ export default function Home() {
             />
           )}
         </div>
-        <div className="flex-1 p-4">
-          {topMarkets.length > 0 && (
+        <div className="flex-1 mt-8 p-4">
+          {/* {topMarkets.length > 0 && (
             <TopMarkets
+              title={`Top 5 Markets for ${
+                selectedCommodityData?.Commodity || "Commodity"
+              }`}
+              markets={topMarkets}
+              priceLabel="Price"
+            />
+          )} */}
+          {topMarkets.length > 0 && (
+            <Component
               title={`Top 5 Markets for ${
                 selectedCommodityData?.Commodity || "Commodity"
               }`}
@@ -71,14 +81,19 @@ export default function Home() {
         </div>
       </div>
       <div
-        className="flex w-3/4 gap-2 mx-auto bg-white shadow-custom-shadow rounded-2xl"
-        style={{ paddingRight: "20px" }}
+        className="w-4/5 gap-4 mx-auto bg-white shadow-custom-shadow rounded-2xl"
+        style={{ paddingRight: "20px", marginBottom: "20px" }}
       >
-        <MLTable />
         <MarketMap />
       </div>
       <div
-        className="flex w-3/4 gap-2 mx-auto my-6 bg-white shadow-custom-shadow rounded-2xl"
+        className=" flex w-4/5 gap-4 mx-auto bg-white shadow-custom-shadow rounded-2xl"
+        style={{ paddingRight: "20px", marginBottom: "20px" }}
+      >
+        <MLTable />
+      </div>
+      <div
+        className="flex w-4/5 gap-4 mx-auto my-12 bg-white shadow-custom-shadow rounded-2xl"
         style={{ paddingRight: "20px" }}
       >
         <Chart />

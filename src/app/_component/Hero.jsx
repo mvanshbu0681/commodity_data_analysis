@@ -1,40 +1,94 @@
 import React from "react";
-import Image from "next/image"; // Assuming you're using Next.js
+import Image from "next/image";
+import { TrendingUp, TrendingDown, Calendar, Package } from "lucide-react";
 
-const Hero = ({ commodityName, variety, lastUpdate, price, unit }) => {
-  const priceColor =
-    price >= 1000
-      ? "text-red-500"
-      : price >= 500
-      ? "text-yellow-500"
-      : "text-green-500";
+const Hero = ({
+  commodityName,
+  variety,
+  lastUpdate,
+  price,
+  unit,
+  imageSrc,
+  previousPrice,
+}) => {
+  const priceChange = price - previousPrice;
+  const priceChangePercentage = ((priceChange / previousPrice) * 100).toFixed(
+    2
+  );
+  const isIncreasing = priceChange >= 0;
 
   return (
-    <div className="bg-white text-black p-12 rounded-xl mx-auto mt-8 shadow-2xl max-w-screen-md">
-      <div className="text-4xl font-extrabold mb-4 border-b-4 border-yellow-400 pb-2">
-        {commodityName}
-      </div>
-      <div className="text-xl mb-6">Variety: {variety}</div>
-      <div className="flex items-center justify-between">
-        <div className="text-gray-500">Last Update: {lastUpdate.split(" ")[0]}</div>
-      </div>
+    <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-3xl mx-auto mt-8 shadow-2xl max-w-4xl h-auto">
+      <div className="bg-white rounded-2xl p-8 shadow-inner">
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="mb-6 md:mb-0 md:mr-8">
+            <h1 className="text-4xl font-extrabold mb-2 text-indigo-900 tracking-tight">
+              {commodityName}
+            </h1>
+            <p className="text-xl text-purple-700 font-semibold mb-4">
+              {variety}
+            </p>
+            <div className="flex items-center text-gray-600 mb-2">
+              <Calendar size={18} className="mr-2" />
+              <span>
+                Last Updated: {new Date(lastUpdate).toLocaleDateString()}
+              </span>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <Package size={18} className="mr-2" />
+              <span>Unit: {unit}</span>
+            </div>
+          </div>
 
-      <div className="flex items-end mt-8">
-        <span className={`text-7xl font-extrabold mr-4 ${priceColor}`}>
-          {price}
-        </span>
-        <span className="text-base mb-3 text-gray-700">per {unit}</span>
-      </div>
+          <div className="relative">
+            <Image
+              // src={imageSrc}
+              src="/onion.jpg"
+              alt={commodityName}
+              width={180}
+              height={180}
+              className="rounded-full shadow-lg transform transition-transform duration-500 hover:scale-110"
+            />
+            <div className="absolute -top-4 -right-4 bg-white rounded-full p-2 shadow-md">
+              {isIncreasing ? (
+                <TrendingUp size={24} className="text-green-500" />
+              ) : (
+                <TrendingDown size={24} className="text-red-500" />
+              )}
+            </div>
+          </div>
+        </div>
 
-      {/* Round Image of Onion at the Bottom */}
-      <div className="flex justify-center mt-8">
-        <Image
-          src="/onion.jpg" // Path to your onion image
-          alt="Onion"
-          width={200}
-          height={200}
-          className="rounded-full"
-        />
+        <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 shadow-inner">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-500 mb-1">
+                Current Price
+              </p>
+              <p className="text-5xl font-bold text-indigo-900">
+                ₹{price.toLocaleString()}
+                <span className="text-base font-normal text-gray-600 ml-2">
+                  per {unit}
+                </span>
+              </p>
+            </div>
+            <div
+              className={`text-right ${
+                isIncreasing ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              <p className="text-sm font-medium mb-1">Price Change</p>
+              <p className="text-2xl font-bold">
+                {isIncreasing ? "+" : ""}
+                {priceChange.toLocaleString()}
+              </p>
+              <p className="text-sm font-medium">
+                ({isIncreasing ? "+" : ""}
+                {priceChangePercentage}%)
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
