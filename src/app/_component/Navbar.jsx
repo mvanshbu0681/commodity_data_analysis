@@ -1,162 +1,280 @@
-"use client";
 import React, { useState, useEffect } from "react";
-import csvData from "../../../data/commoditydata.csv";
-import Select from "react-select";
 import Image from "next/image";
+import { Search, MapPin, ChevronDown, X } from "lucide-react";
 import Logo from "../../../public/logo.png";
-function Navbar({ onCommoditySelect, onFilterChange }) {
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedMarket, setSelectedMarket] = useState("");
-  const [commodities, setCommodities] = useState([]);
+
+const Navbar = ({ onCommoditySelect, onFilterChange }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState({
+    state: "",
+    district: "",
+    market: "",
+  });
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [filteredCommodities, setFilteredCommodities] = useState([]);
-  const [selectedCommodity, setSelectedCommodity] = useState(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const getLocationData = () => {
+    return {
+      Maharashtra: {
+        Pune: ["Pune Market", "Khadki Market"],
+        Mumbai: ["Dadar Market", "Byculla Market"],
+      },
+      Karnataka: {
+        Bangalore: ["KR Market", "Yeshwanthpur Market"],
+        Mysore: ["Devaraja Market", "Bandipalya Market"],
+      },
+    };
+  };
+
+  const locationData = getLocationData();
+  const states = Object.keys(locationData);
+
+  const getCommodities = () => {
+    return [
+      {
+        id: 1,
+        name: "Tomato",
+        variety: "Local",
+        grade: "A",
+        image: "/tomato.jpg",
+      },
+      {
+        id: 2,
+        name: "Onion",
+        variety: "Red",
+        grade: "Premium",
+        image: "/onion.jpg",
+      },
+      // more commodities...
+    ];
+  };
 
   useEffect(() => {
-    // Process the CSV data
-    setCommodities(csvData);
-  }, []);
+    const commodities = getCommodities();
+    const filtered = commodities.filter(
+      (commodity) =>
+        commodity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        commodity.variety.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCommodities(filtered);
+    onFilterChange({ filtered, topRated: commodities });
+  }, [searchTerm, onFilterChange]);
 
-  const states = [...new Set(csvData.map((item) => item.State))];
-  const districts = selectedState
-    ? [
-        ...new Set(
-          csvData
-            .filter((item) => item.State === selectedState)
-            .map((item) => item.District)
-        ),
-      ]
-    : [];
-  const markets = selectedDistrict
-    ? [
-        ...new Set(
-          csvData
-            .filter((item) => item.District === selectedDistrict)
-            .map((item) => item.Market)
-        ),
-      ]
-    : [];
-
-  // Filter commodities based on selected state, district, and market
-  useEffect(() => {
-    if (selectedState && selectedDistrict && selectedMarket) {
-      const filtered = csvData.filter(
-        (item) =>
-          item.State === selectedState &&
-          item.District === selectedDistrict &&
-          item.Market === selectedMarket
-      );
-
-      // const topRated = selectedCommodity
-      //   ? csvData.filter((item) => item.Commodity === selectedCommodity)
-      //   : [];
-
-      const topRated = csvData;
-
-      setFilteredCommodities(filtered);
-      onFilterChange({ filtered, topRated });
-    } else {
-      setFilteredCommodities([]);
-      onFilterChange({ filtered: [] });
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const selected = filteredCommodities[0];
+    if (selected) {
+      onCommoditySelect(selected);
     }
-  }, [
-    selectedState,
-    selectedDistrict,
-    selectedMarket,
-    selectedCommodity,
-    onFilterChange,
-  ]);
+  };
 
-  const commodityOptions = filteredCommodities.map((item) => ({
-    value: item,
-    label: `${item.Commodity} - ${item.Variety} (${item.Grade})`,
-  }));
+  const handleLocationSelect = (type, value) => {
+    setSelectedLocation((prev) => {
+      const newLocation = { ...prev, [type]: value };
+      if (type === "state") {
+        newLocation.district = "";
+        newLocation.market = "";
+      } else if (type === "district") {
+        newLocation.market = "";
+      }
+      return newLocation;
+    });
 
-  const handleCommodityChange = (selectedOption) => {
-    setSelectedCommodity(selectedOption);
-    onCommoditySelect(selectedOption ? selectedOption.value : null);
+    if (type === "market") {
+      setIsLocationOpen(false);
+      onFilterChange({ location: selectedLocation });
+    }
   };
 
   return (
-    <nav className="sticky top-0 z-20  bg-white shadow-2xl backdrop-filter backdrop-blur-2xl bg-opacity-10 border-slate-800">
-      <div className="flex flex-wrap  items-center justify-between max-w-screen-xl p-4 mx-auto">
-        <a href="/" className="flex items-center gap-3">
-          <Image src={Logo} alt="Logo" className="w-8 h-8 lg:w-12 lg:h-12" />
-          <span className="text-xl font-semibold text-black lg:text-3xl">
-            Krishi Saathi
-          </span>
-        </a>
+    <nav className="sticky top-0 z-20 bg-white bg-opacity-40 backdrop-filter backdrop-blur-lg shadow-md transition-all duration-300 ease-in-out h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center items-center h-16 space-x-10">
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <Image
+              src={Logo}
+              alt="Krishi Saathi Logo"
+              width={40}
+              height={40}
+              className="transition-transform duration-300 ease-in-out hover:scale-110"
+            />
+            <span className="ml-3 text-xl font-bold text-green-700 hover:text-green-600 transition-colors duration-300">
+              Krishi Saathi
+            </span>
+          </div>
 
-        <div className="w-full md:w-auto md:order-1 md:flex">
-          <ul className="flex flex-col items-center md:flex-row md:space-x-8">
-            <div className="flex items-center space-x-4 text-black">
-              {/* Add your links here */}
-            </div>
-
-            <div className="flex space-x-4">
-              <select
-                value={selectedState}
-                onChange={(e) => setSelectedState(e.target.value)}
-                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="" disabled>
-                  Select State
-                </option>
-                {states.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                value={selectedDistrict}
-                onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                disabled={!selectedState}
-              >
-                <option value="" disabled>
-                  Select District
-                </option>
-                {districts.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                value={selectedMarket}
-                onChange={(e) => setSelectedMarket(e.target.value)}
-                className="block p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                disabled={!selectedDistrict}
-              >
-                <option value="" disabled>
-                  Select Market
-                </option>
-                {markets.map((market) => (
-                  <option key={market} value={market}>
-                    {market}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex space-x-4">
-              <Select
-                options={commodityOptions}
-                placeholder="Select Commodity"
-                isClearable
-                value={selectedCommodity}
-                onChange={handleCommodityChange}
-                className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          {/* Search bar */}
+          <div className="max-w-lg w-full lg:max-w-xs relative">
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                placeholder="Search for commodities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-all duration-300 ease-in-out"
               />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <X className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                </button>
+              )}
+            </form>
+            {isSearchFocused && filteredCommodities.length > 0 && (
+              <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                {filteredCommodities.map((commodity) => (
+                  <div
+                    key={commodity.id}
+                    className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-green-50 flex items-center"
+                    onClick={() => {
+                      onCommoditySelect(commodity);
+                      setSearchTerm("");
+                    }}
+                  >
+                    <Image
+                      src={commodity.image}
+                      alt={commodity.name}
+                      width={40}
+                      height={40}
+                      className="rounded-full mr-3"
+                    />
+                    <div>
+                      <span className="font-medium block truncate">
+                        {commodity.name}
+                      </span>
+                      <span className="text-gray-500 block text-sm">
+                        {commodity.variety} - Grade {commodity.grade}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Location select */}
+          <div className="ml-4 flex items-center">
+            <div className="relative">
+              <button
+                onClick={() => setIsLocationOpen(!isLocationOpen)}
+                className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out"
+              >
+                <MapPin className="mr-1 h-5 w-5 text-gray-400" />
+                <span className="hidden md:inline">
+                  {selectedLocation.market ||
+                    selectedLocation.district ||
+                    selectedLocation.state ||
+                    "Select Location"}
+                </span>
+                <span className="md:hidden">Location</span>
+                <ChevronDown
+                  className={`ml-1 h-4 w-4 text-gray-400 transition-transform duration-300 ${
+                    isLocationOpen ? "transform rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isLocationOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition-all duration-300 ease-in-out">
+                  <div
+                    className="py-1"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    {!selectedLocation.state && (
+                      <>
+                        <div className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100">
+                          Select State
+                        </div>
+                        {states.map((state, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleLocationSelect("state", state)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 transition-colors duration-150 ease-in-out"
+                            role="menuitem"
+                          >
+                            {state}
+                          </button>
+                        ))}
+                      </>
+                    )}
+                    {selectedLocation.state && !selectedLocation.district && (
+                      <>
+                        <div className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100">
+                          Select District
+                        </div>
+                        {Object.keys(locationData[selectedLocation.state]).map(
+                          (district, index) => (
+                            <button
+                              key={index}
+                              onClick={() =>
+                                handleLocationSelect("district", district)
+                              }
+                              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 transition-colors duration-150 ease-in-out"
+                              role="menuitem"
+                            >
+                              {district}
+                            </button>
+                          )
+                        )}
+                      </>
+                    )}
+                    {selectedLocation.state && selectedLocation.district && (
+                      <>
+                        <div className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100">
+                          Select Market
+                        </div>
+                        {locationData[selectedLocation.state][
+                          selectedLocation.district
+                        ].map((market, index) => (
+                          <button
+                            key={index}
+                            onClick={() =>
+                              handleLocationSelect("market", market)
+                            }
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 transition-colors duration-150 ease-in-out"
+                            role="menuitem"
+                          >
+                            {market}
+                          </button>
+                        ))}
+                      </>
+                    )}
+                    {selectedLocation.state && (
+                      <button
+                        onClick={() =>
+                          setSelectedLocation({
+                            state: "",
+                            district: "",
+                            market: "",
+                          })
+                        }
+                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-150 ease-in-out"
+                        role="menuitem"
+                      >
+                        Clear Selection
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-          </ul>
+          </div>
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

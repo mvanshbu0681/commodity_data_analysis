@@ -47,6 +47,7 @@ export default function Home() {
         onCommoditySelect={handleCommoditySelect}
         onFilterChange={handleFilterChange}
       />
+
       <div className="flex w-4/5 mx-auto">
         <div className="flex-1 p-4">
           {selectedCommodityData && (
@@ -59,16 +60,7 @@ export default function Home() {
             />
           )}
         </div>
-        <div className="flex-1 mt-8 p-4">
-          {/* {topMarkets.length > 0 && (
-            <TopMarkets
-              title={`Top 5 Markets for ${
-                selectedCommodityData?.Commodity || "Commodity"
-              }`}
-              markets={topMarkets}
-              priceLabel="Price"
-            />
-          )} */}
+        <div className="flex-1 mt-8 p-4 ">
           {topMarkets.length > 0 && (
             <Component
               title={`Top 5 Markets for ${
@@ -76,6 +68,7 @@ export default function Home() {
               }`}
               markets={topMarkets}
               priceLabel="Price"
+              style={{ height: "100%" }}
             />
           )}
         </div>
