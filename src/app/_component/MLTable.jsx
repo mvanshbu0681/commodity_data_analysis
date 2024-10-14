@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TrendingUp, DollarSign, Calendar } from "lucide-react";
 import Image from "next/image";
+
 const MLTable = () => {
   const forecastData = [
     { date: "Aug 27", Price: 8900.3 },
@@ -32,9 +33,9 @@ const MLTable = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden mb-8">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+    <div className="flex flex-col items-center justify-center w-full">
+      <div className="max-w-4xl rounded-xl shadow-2xl overflow-hidden mb-8">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
           <h2 className="text-3xl font-bold flex items-center">
             <TrendingUp className="mr-2" />
             Commodity Pricing Forecast
@@ -43,12 +44,12 @@ const MLTable = () => {
             Future commodity pricing based on advanced ML predictions
           </p>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="p-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
             {forecastData.map((item, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-105"
+                className="rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-105"
               >
                 <div className="bg-indigo-100 p-3">
                   <p className="font-medium text-indigo-800 flex items-center justify-center">

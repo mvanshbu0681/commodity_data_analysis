@@ -75,8 +75,8 @@ const chartConfig = {
 
 export function Chart() {
   return (
-    <div className="w-full p-4 md:p-8 bg-gray-50">
-      <Card className="w-full overflow-hidden shadow-lg">
+    <div className="w-full  bg-gradient-to-r from-blue-50 to-green-50">
+      <Card className="w-full overflow-hidden shadow-lg rounded-md">
         <CardHeader className="bg-gradient-to-r from-blue-500 to-green-500 text-white">
           <CardTitle className="text-2xl font-bold flex items-center">
             <TrendingUp className="mr-2" />
@@ -86,7 +86,7 @@ export function Chart() {
             Last 32 weeks of 2024 - Actual vs Predicted Prices
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-4">
           <ChartContainer config={chartConfig} className="w-full h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -144,7 +144,7 @@ export function Chart() {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-4 border border-gray-200 shadow-md rounded-md">
+      <div className="bg-white p-2 border border-gray-200 shadow-md rounded-md">
         <p className="font-bold text-gray-800">{`Week ${label}`}</p>
         <p className="text-sm text-blue-600">{`Actual: ₹${payload[0].value.toFixed(
           2

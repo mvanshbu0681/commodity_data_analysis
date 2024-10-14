@@ -81,13 +81,13 @@ export default function Home() {
       </div>
       <div
         className=" flex w-4/5 gap-4 mx-auto bg-white shadow-custom-shadow rounded-2xl"
-        style={{ paddingRight: "20px", marginBottom: "20px" }}
+        style={{ marginBottom: "20px" }}
       >
         <MLTable />
       </div>
       <div
         className="flex w-4/5 gap-4 mx-auto my-12 bg-white shadow-custom-shadow rounded-2xl"
-        style={{ paddingRight: "20px" }}
+        //style={{ paddingRight: "20px" }}
       >
         <Chart />
       </div>

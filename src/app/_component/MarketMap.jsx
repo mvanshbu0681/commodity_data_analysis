@@ -421,7 +421,6 @@ const MarketMap = () => {
       center={[20.5937, 78.9629]} // Center of India
       zoom={5}
       style={{
-        z: "10",
         height: "400px",
         width: "1215px",
         borderRadius: "15px",
